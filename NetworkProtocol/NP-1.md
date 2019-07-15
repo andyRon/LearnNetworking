@@ -87,7 +87,7 @@ Content-Language: zh-CN
 
 ![](images/NetworkProtocol-01-04.jpg)
 
-3. 传输层层封装后，浏览器会将包传输给<font color=#FF8C00>**网络层**</font>。这层涉及<font color=#FF8C00>IP协议</font>，IP协议会封装浏览器所在机器的 IP 地址(**源IP地址**)和电商网站所在服务器的 IP 地址（**目标IP地址**）。
+3. 传输层层封装后，浏览器会将包传输给<font color=#FF8C00>**网络层**</font>（也叫IP层）。这层涉及<font color=#FF8C00>IP协议</font>，IP协议会封装浏览器所在机器的 IP 地址(**源IP地址**)和电商网站所在服务器的 IP 地址（**目标IP地址**）。
 
 ![](images\NetworkProtocol-01-05.jpg)
 
@@ -141,7 +141,7 @@ Content-Language: zh-CN
 
 
 
-![image-20190116180012059](https://ws3.sinaimg.cn/large/006tNc79gy1fz8kwrnp1wj30t40jmqbl.jpg)
+![](images/NetworkProtocol-01-10.jpg)
 
 
 
