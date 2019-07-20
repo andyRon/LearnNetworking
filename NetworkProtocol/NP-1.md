@@ -1,8 +1,4 @@
-趣谈网络协议-1-为什么要学习网络协议？
-
----------
-
-
+## 趣谈网络协议-1-为什么要学习网络协议？
 
 ```
 public class HelloWorld {
@@ -16,7 +12,7 @@ public class HelloWorld {
 
 
 
-### 协议三要素
+### 1.协议三要素
 
 这种协议还是更接近人类语言，机器不能直接读懂，需要进行翻译，翻译的工作教给<font color=#FF8C00>编译器（compile）</font>。
 
@@ -35,8 +31,6 @@ public class HelloWorld {
 
 
 **只有通过网络协议，才能使一大片机器互相协作、共同完成一件事。**
-
-
 
 用网易考拉的HTTP一段，来描述协议的三要素：
 
@@ -61,11 +55,9 @@ Content-Language: zh-CN
 
 
 
-### 常用的网络协议
+### 2.常用的网络协议
 
 通过一个电商网站下单过程，看涉及的网络协议：
-
-
 
 1. 在浏览器里面输入网易考拉的URL [https://www.kaola.com](https://www.kaola.com/)；
 
@@ -137,7 +129,7 @@ Content-Language: zh-CN
 
 
 
-### 网络协议总结
+### 3.网络协议总结
 
 
 
@@ -145,7 +137,7 @@ Content-Language: zh-CN
 
 
 
-### 问题
+### 4.问题
 
 1. **mac地址是唯一的，为什么可以修改?**  
 
