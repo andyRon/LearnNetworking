@@ -60,11 +60,11 @@
 
 然后调用**send_layer2(buffer)**。Buffer 里面已经有了 HTTP 的头和内容、TCP 的头，以及 IP 的头。这个函数里面要加一下 MAC 的头，记录下源 MAC 地址，得到的就是本机器的 MAC 地址和目标的 MAC 地址。不过，这个还要看当前知道不知道，知道就直接加上；不知道的话，就要通过一定的协议处理过程，找到 MAC 地址。反正要填一个，不能空着。 
 
-
-
 万事俱备，只要 Buffer 里面的内容完整，就可以从网口发出去了，你作为一个程序的任务就算告一段落了。 
 
+更清晰的图示（来自[《图解TCP/IP》](https://book.douban.com/subject/24737674/)）：
 
+![](https:////upload-images.jianshu.io/upload_images/1678135-c12c9498d571abac.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000)
 
 ### **4.揭秘层与层之间的关系**
 
