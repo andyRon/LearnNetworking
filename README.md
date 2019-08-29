@@ -53,3 +53,10 @@
 - [34-基于JSON的RESTful接口协议](./NetworkProtocol/NP-34.md)
 - [35-二进制类RPC协议](./NetworkProtocol/NP-35.md)
 - [36-跨语言类RPC协议](./NetworkProtocol/NP-36.md)
+
+
+
+## 资源
+
+[《TCP/IP详解 卷1：协议》在线阅读版](http://www.52im.net/topic-tcpipvol1.html)
+
