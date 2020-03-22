@@ -2,6 +2,10 @@
 
 [《Web协议详解与抓包实战》](https://time.geekbang.org/course/intro/175)笔记
 
+课件和资源下载：https://github.com/geektime-geekbang/geektime-webprotocol
+
+
+
 ## 一、HTTP/1.1协议
 
 ### 综述
@@ -508,3 +512,731 @@ https://developers.google.com/web/tools/chrome-devtools/network/
 - **Reading Push**: 浏览器正在读取之前收到的本地数据
 
 ![](../images/networking-015.jpg)
+
+
+
+### URI的基本格式以及与URL的区别
+
+#### 当没有 URI 时
+
+- 站长 A 欲分享一部电影 Forrest Gump 给 B，需要告诉: • 请使用 FTP 协议访问 mysite.net，端口是 8502
+   • 登录用户名是user，密码pass
+   • 进入到 /shared/movie 目录下
+
+   • 转换为二进制模式
+   • 下载名为 Forrest Gump.mkv 格式的文件
+
+- 有了 URI:ftp://user:pass@mysite.net:8502/shared/movie/Forrest Gump.mkv
+
+#### 什么是 URI
+
+- **URL**:  RFC1738 (1994.12)，Uniform Resource Locator，表示资源的位置， 期望提供查找资源的方法
+
+- **URN**:  RFC2141 (1997.5)，Uniform Resource Name，期望为资源提供持久 的、位置无关的标识方式，并允许简单地将多个命名空间映射到单个URN命名 空间
+
+  • 例如磁力链接 magnet:?xt=urn:sha1:YNCKHTQC5C
+
+- **URI**:  RFC1630 (1994.6)、RFC3986 (2005.1，取代 RFC2396 和 RFC2732 )，Uniform Resource Identifier，用以区分资源，是 URL 和 URN 的超集，<u>用以取代 URL 和 URN 概念</u>
+
+#### Uniform Resource Identifier 统一资源标识符
+
+- **Resource 资源**
+
+  可以是图片、文档、今天杭州的温度等，也可以是不能通过互联网访问的**实体**，例如人、公司、实体书，也可以是**抽象**的概念，例如亲属关系或者数字符号
+
+  一个资源可以有多个 URI
+
+- **Identifier 标识符**
+   • 将当前资源与其他资源区分开的名称
+
+- **Uniform 统一**
+   • 允许不同种类的资源在同一上下文中出现
+   • 对不同种类的资源标识符可以使用同一种语义进行解读
+   • 引入新标识符时，不会对已有标识符产生影响
+   • 允许同一资源标识符在不同的、internet 规模下的上下文中出现
+
+#### URI 的组成
+
+• 组成:schema, user information, host, port, path, query, fragment
+
+![](../images/networking-016.jpg)
+
+
+
+https://tools.ietf.org/html/rfc7231?test=1#page-7
+
+#### 合法的 URI
+
+• ftp://ftp.is.co.za/rfc/rfc1808.txt
+ • http://www.ietf.org/rfc/rfc2396.txt
+ • ldap://[2001:db8::7]/c=GB?objectClass?one
+ • mailto:John.Doe@example.com
+ • news:comp.infosystems.www.servers.unix tel:+1-816-555-1212 • telnet://192.0.2.16:80/
+
+• urn:oasis:names:specification:docbook:dtd:xml:4.1.2
+
+
+
+#### URI 格式(一)
+
+• URI = scheme ":" hier-part [ "?" query ] [ "#" fragment ] 
+
+• scheme=ALPHA*(ALPHA/DIGIT/"+"/"-"/".")
+
+• 例如:http, https, ftp,mailto,rtsp,file,telnet • query=*(pchar/"/"/"?")
+ • fragment=*(pchar/"/"/"?")
+
+示例: https://tools.ietf.org/html/rfc7231?test=1#page-7
+
+#### URI 格式(二)
+
+hier-part = "//" authority path-abempty / path-absolute / path-rootless / path-empty 
+
+​	• authority = [ userinfo "@" ] host [ ":" port ]
+
+​		 • userinfo = *( unreserved / pct-encoded / sub-delims / ":" ) • host = IP-literal / IPv4address / reg-name
+​		 • port = *DIGIT
+
+示例: https://tom:pass@localhost:8080/index.html
+
+#### URI格式(三): hier-part
+
+• path = path-abempty/ path-absolute/ path-noscheme / path-rootless / path-empty 
+
+​	• path-abempty = *( “/” segment )
+
+​		• 以/开头的路径或者空路径
+​	• path-absolute = “/” [ segment-nz *( “/” segment ) ]
+
+​		• 以/开头的路径，但不能以//开头
+ 	• path-noscheme = segment-nz-nc *( “/” segment )
+
+​		• 以非:号开头的路径
+ 	• path-rootless = segment-nz *( “/” segment )
+
+​		• 相对path-noscheme，增加允许以:号开头的路径 
+
+​	• path-empty = 0<pchar>
+
+​		• 空路径
+
+
+
+#### 相对 URI
+
+URI-reference = URI / relative-ref
+ • relative-ref = relative-part [ "?" query ] [ "#" fragment ]
+
+​	• relative-part = "//" authority path-abempty / path-absolute / path-noscheme / path-empty
+
+
+
+https://tools.ietf.org/html/rfc7231?test=1#page-7
+
+/html/rfc7231?test=1#page-7
+
+
+
+### 为什么要对URI进行编码？
+
+- 传递数据中，如果存在用作分隔符的保留字符怎么办?
+
+- 对可能产生歧义性的数据编码 
+
+  • 不在 ASCII 码范围内的字符 
+  • ASCII 码中不可显示的字符
+  • URI 中规定的保留字符
+  • 不安全字符(传输环节中可能会被不正确处理)，如空格、引号、尖括号等
+
+**示例:**
+
+`https://www.baidu.com/s?wd=?#! `
+
+`https://www.baidu.com/s?wd=极客 时间`
+
+`https://www.baidu.com/s?wd=极客 ‘>时 间`
+
+#### 保留字符与非保留字符
+
+##### 保留字符
+
+reserved = gen-delims / sub-delims
+ 	• gen-delims=":"/"/"/"?"/"#"/"["/"]"/"@"
+ 	• sub-delims="!"/"$"/"&"/"'"/"("/")"/"*"/"+"/","/";"/"="
+
+##### 非保留字符
+
+unreserved = ALPHA / DIGIT / "-" / "." / "_" / "~" 
+
+​	 • ALPHA: %41-%5A and %61-%7A
+​	 • DIGIT: %30-%39
+​	 • -:%2D .:%2E _:%5F
+​	 • ~: %7E，某些实现将其认为保留字符
+
+
+
+#### URI 百分号编码
+
+- 百分号编码的方式
+   • pct-encoded = "%" HEXDIG HEXDIG
+
+  ​	• US-ASCII:128 个字符(95 个可显示字符，33 个不可显示字符)
+
+  ​	• 参见:https://zh.wikipedia.org/wiki/ASCII 
+
+   • 对于 HEXDIG 十六进制中的字母，大小写等价
+
+- 非 ASCII 码字符(例如中文):建议先 UTF8 编码，再 US-ASCII 编码 • 对 URI 合法字符，编码与不编码是等价的
+
+- 例如，“URI 转换”既可以“URI%e8%bd%ac%e6%8d%a”，也可以 “%55%52%49%e8%bd%ac%e6%8d%a2”
+
+  • https://www.baidu.com/s?wd=URI%20%e8%bd%ac%e6%8d%a2
+  • https://www.baidu.com/s?wd=%55%52%49%20%e8%bd%ac%e6%8d%a2
+
+
+
+### 详解HTTP的请求行
+
+#### 请求行
+
+request-line = method SP request-target SP HTTP-version CRLF
+
+![](../images/networking-017.jpg)
+
+method 方法:指明操作目的，动词
+**request-target = origin-form / absolute-form / authority-form / asterisk-form**
+
+- origin-form = absolute-path [ "?" query ]
+	向 origin server 发起的请求，path 为空时必须传递 /
+
+- absolute-form = absolute-URI
+   • 仅用于向正向代理 proxy 发起请求时，详见正向代理与隧道
+
+- authority-form = authority
+   • 仅用于 CONNECT 方法（如：**VPN**等隧道），例如 CONNECT www.example.com:80 HTTP/1.1
+
+- asterisk-form = "*“
+ • 仅用于 OPTIONS 方法
+
+HTTP-version 版本号发展历史:https://www.w3.org/Protocols/History.html 
+
+- HTTP/0.9:只支持 GET 方法，过时
+- HTTP/ 1.0:RFC1945，1996， 常见使用于代理服务器(例如 Nginx 默认配置)
+- HTTP/ 1.1:RFC2616，1999
+
+- HTTP/ 2.0:2015.5 正式发布
+
+#### 常见方法(RFC7231)
+
+- GET:主要的获取信息方法，大量的**性能优化**都针对该方法，**幂等方法**（对分布式系统中**事务设计**很有意义）
+- HEAD:类似 GET 方法，但服务器不发送 BODY，用以获取 HEAD 元数据，幂等方法 
+- POST:常用于提交 HTML FORM 表单、新增资源等
+- PUT:更新资源，带条件时是幂等方法
+- DELETE:删除资源，幂等方法 
+
+- CONNECT:建立 tunnel 隧道
+
+- OPTIONS:显示服务器对访问资源支持的方法，幂等方法
+
+  ```shell
+  $ curl static.taohui.tech -X OPTIONS -I
+  HTTP/1.1 200 OK
+  Server: openresty/1.15.8.1
+  Date: Sun, 22 Mar 2020 02:43:44 GMT
+  Content-Length: 0
+  Connection: keep-alive
+  DAV: 2
+  Allow: GET,HEAD,PUT,DELETE,MKCOL,COPY,MOVE,PROPFIND,OPTIONS,LOCK,UNLOCK
+  ```
+
+  
+
+- TRACE:回显服务器收到的请求，用于定位问题。有安全风险。2007nginx不再支持
+
+  ```
+  Changes with nginx 0.5.17
+   *) Change: now nginx always returns the 405 status for the TRACE method.
+  ```
+
+  
+
+#### 用于文档管理的 WEBDAV 方法(RFC2518)
+
+Restful  
+
+- PROPFIND:从 Web 资源中检索以 XML 格式存储的属性。它也被重载，以允许一个检索远程系统的集合结构(也叫目录层次结构)
+- PROPPATCH:在单个原子性动作中更改和删除资源的多个属性
+- MKCOL:创建集合或者目录
+- COPY:将资源从一个 URI 复制到另一个 URI
+- MOVE:将资源从一个 URI 移动到另一个 URI
+- LOCK:锁定一个资源。WebDAV 支持共享锁和互斥锁。
+- UNLOCK:解除资源的锁定
+
+#### WEBDAV 验证 !!
+
+https://time.geekbang.org/course/detail/100026801-94392  
+
+07:10 处
+
+
+
+右击 > Follow > HTTP Stream
+
+![](../images/networking-018.jpg)
+
+### HTTP的正确响应码
+
+#### HTTP 响应行
+
+status-line = HTTP-version SP status-code SP reason-phrase CRLF
+
+![](../images/networking-019.jpg)
+
+#### 响应码分类:1xx
+
+响应码规范:RFC6585 (2012.4)、RFC7231 (2014.6)。（一些服务器或中间件会自定义新的响应码）
+1xx：请求已接收到，需要进一步处理才能完成，HTTP1.0 不支持
+
+- **100 Continue**:上传大文件前使用
+   • 由客户端发起请求中携带 Expect: 100-continue 头部触发
+
+- **101 Switch Protocols**:协议升级使用
+   • 由客户端发起请求中携带 Upgrade: 头部触发，如升级 websocket 或者 http/2.0
+
+- **102 Processing**:WebDAV 请求可能包含许多涉及文件操作的子请求，需要很长时间 才能完成请求。该代码表示服务器已经收到并正在处理请求，但无响应可用。这样可 以防止客户端超时，并假设请求丢失
+
+#### 响应码分类: 2xx
+
+**2xx:成功处理请求**
+
+- **200 OK**: 成功返回响应。
+- **201 Created**: 有新资源在服务器端被成功创建。
+
+- **202 Accepted**: 服务器接收并开始处理请求，但请求未处理完成。这样一个**模糊的概念**是有意如此设计，可以覆盖更多的场景。例如**异步、需要长时间处理**的任务。
+
+- **203 Non-Authoritative Information**: 当代理服务器修改了 origin server 的原始响应包体时(例如更换了HTML中的元素值)，代理服务器可以通过修改 200为203的方式告知客户端这一事实，方便客户端为这一行为作出相应的处理。 203响应可以被缓存。
+
+- **204 No Content**:成功执行了请求且不携带响应包体，并暗示客户端无需 更新当前的页面视图。
+
+- **205 Reset Content**:成功执行了请求且不携带响应包体，同时指明客户端 需要更新当前页面视图。
+
+- **206 Partial Content**:使用 **range协议**时返回部分响应内容时的响应码
+
+- **207 Multi-Status**:RFC4918 ，在 WEBDAV 协议中以 XML 返回多个资源
+
+  的状态。
+
+- **208 Already Reported:**RFC5842 ，为避免相同集合下资源在207响应码 下重复上报，使用 208 可以使用父集合的响应码。
+
+#### 响应码分类: 3xx
+
+3xx:重定向使用 Location 指向的资源或者缓存中的资源。在 RFC2068 中规定客户端重定向次数不应超过 5 次，以防止死循环。
+
+- 300 Multiple Choices:资源有多种表述，通过 300 返回给客户端后由其 自行选择访问哪一种表述。由于缺乏明确的细节，300 很少使用。
+
+- 301 Moved Permanently:资源永久性的重定向到另一个 URI 中。 
+- 302 Found:资源临时的重定向到另一个 URI 中。
+- 303 See Other:重定向到其他资源，常用于 POST/PUT 等方法的响应中。
+- 304 Not Modified:当客户端拥有可能过期的缓存时，会携带缓存的标识 etag、时间等信息询问服务器缓存是否仍可复用，而304是告诉客户端可以 复用缓存。
+- 307 Temporary Redirect:类似302，但明确重定向后请求方法必须与原 请求方法相同，不得改变。
+- 308 Permanent Redirect:类似301，但明确重定向后请求方法必须与原请 求方法相同，不得改变。
+
+
+
+### HTTP的错误响应码
+
+#### 响应码分类: 4xx
+
+4xx:客户端出现错误
+
+- 400 Bad Request:服务器认为客户端出现了错误，但不能明确判断为以下哪种错误
+
+  时使用此错误码。例如HTTP请求格式错误。
+
+- 401 Unauthorized:用户认证信息缺失或者不正确，导致服务器无法处理请求。
+
+- 407 Proxy Authentication Required:对需要经由代理的请求，认证信息未通过代理 服务器的验证
+
+- 403 Forbidden:服务器理解请求的含义，但没有权限执行此请求
+
+- **404 Not Found**:服务器没有找到对应的资源
+
+- 410 Gone:服务器没有找到对应的资源，且明确的知道该位置永久性找不到该资源
+
+- 405 Method Not Allowed:服务器不支持请求行中的 method 方法
+
+  ```shell
+  $ curl www.sina.com.cn -X TRACE -I
+  HTTP/1.1 405 Not Allowed
+  Server: nginx
+  Date: Sun, 22 Mar 2020 03:20:12 GMT
+  Content-Type: text/html
+  Content-Length: 150
+  Connection: close
+  X-Via-CDN: f=edge,s=cmcc.nanjing.union.237.nb.sinaedge.com,c=223.67.12.45;
+  ```
+
+  
+
+- 406 Not Acceptable:对客户端指定的资源表述不存在(例如对语言或者编码有要
+
+  求)，服务器返回表述列表供客户端选择。
+
+- 408 Request Timeout:服务器接收请求超时
+
+- 409 Conflict:资源冲突，例如上传文件时目标位置已经存在版本更新的资源
+
+- 411 Length Required:如果请求含有包体且未携带 Content-Length 头部，且不属于 chunk类请求时，返回 411
+
+- 412 Precondition Failed:复用缓存时传递的 If-Unmodified-Since 或 If- None-Match 头部不被满足
+
+- 413 Payload Too Large/Request Entity Too Large:请求的包体超出服 务器能处理的最大长度
+
+- 414 URI Too Long:请求的 URI 超出服务器能接受的最大长度
+
+- 415 Unsupported Media Type:上传的文件类型不被服务器支持
+
+- 416 Range Not Satisfiable:无法提供 Range 请求中指定的那段包体
+
+- 417 Expectation Failed:对于 Expect 请求头部期待的情况无法满足时的 响应码
+
+- 421 Misdirected Request:服务器认为这个请求不该发给它，因为它没有能力 处理。
+
+- 426 Upgrade Required:服务器拒绝基于当前 HTTP 协议提供服务，通过 Upgrade 头部告知客户端必须升级协议才能继续处理。
+
+- 428 Precondition Required:用户请求中缺失了条件类头部，例如 If-Match
+
+- 429 Too Many Requests:客户端发送请求的速率过快
+
+- 431 Request Header Fields Too Large:请求的 HEADER 头部大小超过限制
+
+- 451 Unavailable For Legal Reasons:RFC7725 ，由于法律原因资源不可访问
+
+#### 响应码分类: 5xx
+
+5xx:服务器端出现错误
+
+- 500 Internal Server Error:服务器内部错误，且不属于以下错误类型 
+- 501 Not Implemented:服务器不支持实现请求所需要的功能
+- 502 Bad Gateway:代理服务器无法获取到合法响应
+- **503 Service Unavailable**:服务器资源尚未准备好处理当前请求
+- 504 Gateway Timeout:代理服务器无法及时的从上游获得响应(代理服务器超时)
+- 505 HTTP Version Not Supported:请求使用的 HTTP 协议版本不支持
+- 507 Insufficient Storage:服务器没有足够的空间处理请求（通常不让用户知道，暴露了服务器信息）
+- 508 Loop Detected:访问资源时检测到循环
+- 511 Network Authentication Required:代理服务器发现客户端需要进 行身份验证才能获得网络访问权限
+
+
+
+### 如何管理跨代理服务器的长短连接？
+
+#### HTTP 连接的常见流程
+
+短链接
+
+![](../images/networking-020.jpg)
+
+
+
+#### 从 TCP 编程上看 HTTP 请求处理
+
+![](../images/networking-021.jpg)
+
+
+
+#### 短连接与长连接
+
+Connection 头部
+
+ - Keep-Alive:长连接
+
+   * 客户端请求长连接
+      • Connection: Keep-Alive
+
+   * 服务器表示支持长连接
+      • Connection: Keep-Alive
+   * 客户端复用连接
+   * HTTP/1.1 默认支持
+     + Connection: Keep-Alive 无意义 
+
+- Close:短连接
+
+- 对代理服务器的要求
+
+  不转发 Connection 列出头部，该 头部仅与当前连接相关
+
+![](../images/networking-022.jpg)
+
+#### Connection 仅针对当前连接有效
+
+user agent 与 origin server 间有层层 proxy 代理
+
+![](../images/networking-023.jpg)
+
+
+
+#### 代理服务器对长连接的支持
+
+**问题:各方间错误使用了长连接**
+
+- 客户端发起长连接
+- 代理服务器陈旧，不能正确的处理请求的 Connection 头部，将客户端请求中的 Connection: Keep-Alive 原样转发给上游服务器 客户端
+- 上游服务器正确的处理了 Connection 头部，在发送响应后没有关闭连接，而试图保持、复用与不认长连接的代理服务器的连接
+
+- 代理服务器收到响应中 Connection: Keep-Alive 后不认，转发给 客户端，同时等待服务器关闭短连接
+- 客户端收到了 Connection: Keep-Alive，认为可以复用长连接，继 续在该连接上发起请求
+- 代理服务器出错，因为短连接上不能发起两次请求
+
+**Proxy-Connection**
+
+- 陈旧的代理服务器不识别该头部:退化为短连接
+
+- 新版本的代理服务器理解该头部 
+  - 与客户端建立长连接
+  - 与服务器使用 Connection 替代 Proxy-Connect 头部
+
+
+
+![](../images/networking-024.jpg)
+
+
+
+为了防止正向代理是很老的服务器，不识别长链接
+
+
+
+### HTTP消息在服务器端的路由
+
+#### Host 头部
+
+- **Host = uri-host [ ":" port ]**
+  - HTTP/1.1 规范要求，不传递 Host 头部则返回 400 错误响应码（以前域名比较少，每一个服务器IP地址仅对应一个域名，现在域名比较多）
+
+- 为防止陈旧的代理服务器，发向正向代理的请求 **request-target** 必须以 **absolute-form** 形式出现
+  - request-line = method SP request-target SP HTTP-version CRLF 
+  - absolute-form = absolute-URI
+    - absolute-URI = scheme ":" hier-part [ "?" query ]
+
+#### 规范与实现间是有差距的
+
+关于 Host 头部:https://tools.ietf.org/html/rfc7230#section-5.4
+
+- A client MUST send a Host header field in all HTTP/1.1 request messages.
+- A server MUST respond with a 400 (Bad Request) status code to any HTTP/1.1 request message that **lacks** a Host header field and to any request message that contains **more than one** Host header field or a Host header field with an **invalid field-value**.
+
+#### Host 头部与消息的路由
+
+1. 建立 TCP 连接
+
+   确定服务器的 IP 地址
+
+2. 接收请求
+
+3. 寻找虚拟主机
+
+   匹配 Host 头部与域名
+
+4. 寻找 URI 的处理代码 
+
+   匹配URI 
+
+•
+
+• 匹配URI 
+
+5. 执行处理请求的代码
+
+   访问资源
+
+6. 生成 HTTP 响应
+
+   各中间件基于 PF 架构串行修改响应
+
+7. 发送 HTTP 响应 
+8. 记录访问日志
+
+
+
+### 代理服务器转发消息时的相关头部
+
+#### 客户端与源服务器间存在多个代理
+
+![](../images/networking-025.jpg)
+
+
+
+#### 消息的转发
+
+- Max-Forwards 头部
+  - 限制 Proxy 代理服务器的最大转发次数，仅对 TRACE/OPTIONS 方法有效 
+  - Max-Forwards = 1*DIGIT
+
+* Via 头部
+
+  * 指明经过的代理服务器名称及版本
+
+  * Via = 1#( received-protocol RWS received-by [ RWS comment ] )
+
+    received-protocol = [ protocol-name "/" ] protocol-version
+
+    received-by = ( uri-host [ ":" port ] ) / pseudonym
+
+    pseudonym = token
+
+- Cache-Control:no-transform
+ 禁止代理服务器修改响应包体
+
+
+
+#### 如何传递 IP 地址?
+
+![](/Users/andyron/Library/Application Support/typora-user-images/image-20200322161957451.png)
+
+### 请求与响应的上下文
+
+#### 请求的上下文: User-Agent
+
+指明客户端的类型信息，服务器可以据此对资源的表述做抉择
+
+- `User-Agent = product *( RWS ( product / comment ) ) *`
+
+  `*product = token ["/" product-version]`
+  `RWS=1*(SP/HTAB)`
+
+- 例如:
+  * User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:66.0) Gecko/20100101 Firefox/66.0
+  * User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36
+
+Chrome与Safari使用同样的渲染引擎
+
+
+
+#### 请求的上下文: Referer
+
+浏览器对**来自某一页面**的请求自动添加的头部
+
+- Referer = absolute-URI / partial-URI
+
+- 例如:
+  Referer: https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/User-Agent
+
+- Referer 不会被添加的场景
+
+  来源页面采用的协议为表示本地文件的 "file" 或者 "data" URI
+  当前请求页面采用的是 http 协议，而来源页面采用的是 https 协议
+
+- 服务器端常用于统计分析、缓存优化、防盗链等功能
+
+
+
+#### 请求的上下文: From
+
+- 主要用于网络爬虫，告诉服务器运维人员如何通过邮件联系到爬虫的负责人
+
+- From = mailbox ，例如: From: webmaster@example.org
+
+
+
+#### 响应的上下文:Server
+
+- 指明服务器上所用软件的信息，用于帮助客户端定位问题或者统计数据 
+
+- Server = product *( RWS ( product / comment ) )
+
+  product = token ["/" product-version]
+
+  例如: Server: nginx ，Server: openresty/1.13.6.2
+
+#### 响应的上下文: Allow 与 Accept-Ranges
+
+- **Allow**:告诉客户端，服务器上该 URI 对应的资源允许哪些方法的执行
+
+  Allow = #method。例如: Allow: GET, HEAD, PUT
+
+- **Accept-Ranges**:告诉客户端服务器上该资源是否允许 range 请求
+  Accept-Ranges = acceptable-ranges 。 例如:
+
+• 例如:
+
+​		Accept-Ranges: bytes   接受range请求
+
+​		Accept-Ranges: none
+
+
+
+### 内容协商与资源表述
+
+#### 内容协商
+
+每个 URI 指向的资源可以是任何事物，可以有多种不同的表述，例如一份文档可以有不同语言的翻译、不同的媒体格式、可以针对不同的浏览器提供不同的压缩编码等。
+
+![](../images/networking-026.jpg)
+
+##### 内容协商的两种方式
+
+- Proactive 主动式内容协商:
+  指由客户端先在请求头部中提出需要的表述形式，而服务器根据这些请求头部提供特定的 representation 表述
+
+  ![](../images/networking-027.jpg)
+
+- Reactive 响应式内容协商:  （没有统一标准，各大浏览器很少使用）
+
+  指服务器返回 300 Multiple Choices 或者 406 Not Acceptable，由客户端 选择一种表述 URI 使用
+
+  ![image-20200322173717069](../images/networking-028.jpg)
+
+
+
+#### 常见的协商要素
+
+- 质量因子 q:内容的质量、可接受类型的优先级(不同语言的优先级)
+
+- 媒体资源的 MIME 类型及质量因子
+
+  Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+
+  Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp, image/apng,*/*;q=0.8,application/signed-exchange;v=b3
+
+- 字符编码:由于 UTF-8 格式广为使用， Accept-Charset 已被废弃 
+
+  Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7
+
+- 内容编码:主要指压缩算法
+
+  Accept-Encoding: gzip, deflate, br
+
+- 表述语言
+
+  Accept-Language: zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7
+  Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2
+
+#### 国际化与本地化
+
+- internationalization(i18n，i 和 n 间有 18 个字符)
+   指设计软件时，在不同的国家、地区可以不做逻辑实现层面的修改便能够以不同的语言显示
+
+- localization(l10n，l 和 n 间有 10 个字符)
+   指内容协商时，根据请求中的语言及区域信息，选择特定的语言作为资源表述
+
+#### 资源表述的元数据头部
+
+- 媒体类型、编码。 content-type: text/html; charset=utf-8
+
+- 内容编码。 content-encoding: gzip
+
+- 语言。Content-Language: de-DE, en-CA
+
+
+
+在Chrome中拷贝访问百度首页的curl命令，到命令中测试
+
+![](../images/networking-029.jpg)
+
+```shell
+$ curl 'https://www.baidu.com/' -H 'Connection: keep-alive' -H 'Upgrade-Insecure-Requests: 1' -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36' -H 'Sec-Fetch-Dest: document' -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9' -H 'Sec-Fetch-Site: none' -H 'Sec-Fetch-Mode: navigate' -H 'Sec-Fetch-User: ?1' -H 'Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7,de;q=0.6' -H 'Cookie: BAIDUID=F9989570A3E97C2BA3ECCC641B3719BB:FG=1; BIDUPSID=F9989570A3E97C2BA3ECCC641B3719BB; PSTM=1557330526; BD_UPN=123253; BDUSS=VdmamtLVi1Odk1IM0VJazB6VmFDc1pJRzJpbH5xVkRPbmRrRkp-Z3VabUt3SVJkRVFBQUFBJCQAAAAAAAAAAAEAAABOJ4oIMTU4N18AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIozXV2KM11dL; BDORZ=B490B5EBF6F3CD402E515D22BCDA1598; MCITY=-%3A; delPer=0; BD_CK_SAM=1; PSINO=3; H_PS_PSSID=30972_1444_31125_21109_30840_30905_30823_31085; BDSVRTM=0' --compressed
+```
+
+
+
+###  HTTP包体的传输方式（1）：定长包体
+
