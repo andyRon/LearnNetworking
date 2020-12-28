@@ -361,3 +361,354 @@ HTTP通信时，除客户端和服务器以外，还有一些用于通信数据�
 #### 客户端的缓存
 
 也就是浏览器缓存，IE的叫做临时网络文件（Temporary Internet File）。
+
+
+
+## 6 HTTP首部
+
+### 报文首部字段
+
+使用首部字段是为了给浏览器和服务器提供报文主体大小、所使用的语言、认证信息等内容。
+
+#### 首部字段结构
+
+```
+首部字段名: 字段值
+```
+
+如：
+
+```
+Content-Type: text/html
+```
+
+字段值也可以有多个值：
+
+```
+Keep-Alie: timeout=15, max=100
+```
+
+首部字段重复的情况规范内尚未明确，不同浏览器有不同的处理逻辑。
+
+#### HTTP/1.1 首部字段一览
+
+![](../images/networking-050.jpg)
+
+![](../images/networking-051.jpg)
+
+![](../images/networking-052.jpg)
+
+![](../images/networking-053.jpg)
+
+#### End-to-end首部和Hop-by-hop首部
+
+##### 端到端首部（End-to-end Header）
+
+##### 逐跳首部（Hop-by-hop Header）
+
+Connection
+Keep-Alive
+Proxy-Authenticate
+Proxy-Authorization
+Trailer
+TE
+Transfer-Encoding
+Upgrade
+
+### 通用首部字段
+
+#### Cache-Control  ??
+
+操作缓存的工作机制。
+
+Cache-Control指令的参数是可选的，多个指令之间通过“,”分隔。可用于请求及响应时。
+
+```
+Cache-Control: private, max-age=0, no-cache
+```
+
+![](../images/networking-054.jpg)
+
+![](../images/networking-055.jpg)
+
+##### private指令
+
+```
+Cache-Control: private
+```
+
+表示缓存服务器只会对该特定用户提供资源缓存的服务。
+
+##### no-cache指令
+
+![](../images/networking-056.jpg)
+
+```
+Cache-Control: no-cache
+```
+
+为了防止从缓存中返回过期的资源。
+
+##### no-store指令
+
+```
+Cache-Control: no-store
+```
+
+暗示请求（和对应的响应）或响应中包含机密信息。
+
+从字面意思上很容易把no-cache误解成为不缓存，但事实上no-cache代表不缓存过期的资源，缓存会向源服务器进行有效期确认后处理资源，也许称为do-not-serve-from-cache-without-revalidation更合适。no-store才是真正地不进行缓存，请读者注意区别理解。
+
+##### s-maxage指令
+
+```
+Cache-Control: s-maxage=604800 （单位：秒）
+```
+
+s-maxage 与 max-age功能类似，不同的是s-maxage指令只适用于供多位用户使用的公共缓存服务器（一般指代理）。也就是说，对于向同一用户重复返回响应的服务器来说，这个指令没有任何作用。
+
+另外，当使用s-maxage指令后，则直接忽略对Expires首部字段及max-age指令的处理。
+
+##### max-age指令
+
+![](../images/networking-057.jpg)
+
+```
+Cache-Control: max-age=604800 （单位：秒）
+```
+
+当客户端发送的请求中包含max-age指令时，如果判定缓存资源的缓存时间数值比指定时间的数值更小，那么客户端就接收缓存的资源。另外，当指定max-age值为0，那么缓存服务器通常需要将请求转发给源服务器。
+
+当服务器返回的响应中包含max-age指令时，缓存服务器将不对资源的有效性再作确认，而max-age数值代表资源保存为缓存的最长时间。
+
+应用HTTP/1.1版本的缓存服务器遇到同时存在Expires首部字段的情况时，会优先处理max-age指令，而忽略掉Expires首部字段。而HTTP/1.0版本的缓存服务器的情况却相反，max-age指令会被忽略掉。
+
+##### min-fresh指令
+
+##### max-stale指令
+
+##### only-if-cached指令
+
+##### must-revalidate指令
+
+##### proxy-revalidate指令
+
+##### no-transform指令
+
+##### Cache-Control扩展
+
+#### Connection
+
+
+
+#### Date
+
+
+
+#### Pragma
+
+
+
+#### Trailer
+
+
+
+#### Transfer-Encoding
+
+
+
+#### Upgrade
+
+
+
+#### Via
+
+
+
+#### Warning
+
+```
+Warning: 113 gw.hackr.jp:8080 "Heuristic expiration" Tue, 03 Jul=>2012 05:09:44 GMT
+```
+
+Warning首部的格式（最后日期部分可省略）：
+
+```
+Warning: [警告码][警告的主机：端口号]“[警告内容]”([日期时间])
+```
+
+HTTP/1.1中定义了7种警告：
+
+![](../images/networking-058.jpg)
+
+### 请求首部字段
+
+用于补充请求的附加信息、客户端信息、对响应内容相关的优先级等内容。
+
+#### Accept
+
+#### Accept-Charset
+
+#### Accept-Encoding
+
+#### Accept-Language
+
+#### Authorization
+
+#### Expect
+
+#### From
+
+#### Host
+
+#### If-Match
+
+#### If-Modified-Since
+
+#### If-None-Match
+
+#### If-Range
+
+#### If-Unmodified-Since
+
+#### Max-Forwards
+
+#### Proxy-Authorization
+
+#### Range
+
+#### Referer
+
+#### TE
+
+#### User-Agent
+
+### 响应首部字段
+
+用于补充响应的附加信息、服务器信息，以及对客户端的附加要求等信息。
+
+#### Accept-Ranges
+
+#### Age
+
+#### ETag
+
+#### Location
+
+#### Proxy-Authenticate
+
+#### Retry-After
+
+#### Server
+
+#### Vary
+
+#### WWW-Authenticate
+
+### 实体首部字段
+
+实体首部字段是包含在请求报文和响应报文中的实体部分所使用的首部，用于补充内容的更新时间等与实体相关的信息。
+
+#### Allow
+
+#### Content-Encoding
+
+#### Content-Language
+
+#### Content-Length
+
+#### Content-Location
+
+#### Content-MD5
+
+#### Content-Range
+
+#### Content-Type
+
+#### Expires
+
+#### Last-Modified
+
+### 为Cookie服务的首部字段
+
+Cookie的工作机制是用户识别及状态管理。
+
+调用Cookie时，由于可校验Cookie的有效期，以及发送方的域、路径、协议等信息，所以正规发布的Cookie内的数据不会因来自其他Web站点和攻击者的攻击而泄露。
+
+![](../images/networking-059.jpg)
+
+![](../images/networking-060.jpg)
+
+### 其他首部字段
+
+#### X-Frame-Options
+
+#### X-XSS-Protection
+
+#### DNT
+
+#### P3P
+
+## 7 确保Web安全的HTTPS
+
+### HTTP的缺点
+
+
+
+### HTTP+加密+认证+完整性保护=HTTPS
+
+
+
+## 8 确认访问用户身份的认证
+
+
+
+### BASIC认证
+
+
+
+### DIGEST认证
+
+
+
+### SSL客户端认证
+
+
+
+### 基于表单认证
+
+
+
+## 9 基于HTTP的功能追加协议
+
+
+
+### 消除HTTP瓶颈的SPDY
+
+
+
+### 使用浏览器进行全双工通信的WebSocket
+
+
+
+### 期盼已久的HTTP/2.0
+
+
+
+### Web服务器管理文件的WebDAV
+
+
+
+## 10 构建Web内容的技术
+
+
+
+## 11 Web的攻击技术
+
+
+
+### 因输出值转义不完全引发的安全漏洞
+
+
+
+### 因会话管理疏忽引发的安全漏洞
