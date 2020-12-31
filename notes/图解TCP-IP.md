@@ -551,4 +551,206 @@ NAT(Network Address Translator)，用于本地网络中使用私有地址，在�
 
 ### 5.6 IP隧道
 
+## 6 TCP与UDP
+
+### 6.1 传输层的作用
+
+#### 传输层定义
+
+传输层的TCP和UDP，为了识别自己所传输的数据部分究竟应该发给哪个应用，设定一个编号（端口号）。
+
+![](../images/networking-061.jpg)
+
+#### 通信处理
+
+![](../images/networking-062.jpg)
+
+这些服务端程序在UNIX系统当中叫做**守护进程**。例如**httpd**（HTTP守护进程）、**sshd**（SSH守护进程）等等。
+
+在UNIX中，并不是将这些守护进程都启动，而是启动一个超级守护进程**inetd**（互联网守护进程），通过数据包中的端口号，会创建（fork）新的进程并转换（exec）为sshd等守护进程。
+
+#### TCP与UDP的区别
+
+### 6.2 端口号
+
+数据链路层，MAC地址，识别同一链路中不同的计算机；
+
+IP层，IP地址，识别TCP/IP网络中互连的主机和路由器；
+
+传输层，端口号，识别同一台计算机中不同应用程序，端口号也被称为**程序地址**。
+
+#### 根据端口号识别应用
+
+#### 通过IP地址、端口号、协议号进行通信识别
+
+采用5个信息（源IP地址、目标IP地址、协议号、源端口号、目标端口号）来识别一个通信。
+
+![](../images/networking-063.jpg)
+
+#### 端口号如何确定
+
+##### 标准既定的端口号
+
+**知名端口号**（Well-Known Port Number），0~1023
+
+**注册端口号**，1024~49151
+
+[详细最新](https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml)
+
+##### 动态分配
+
+49152~65535
+
+不同的传输协议可以使用相同的端口号。
+
+![](../images/networking-064.jpg)
+
+![](../images/networking-065.jpg)
+
+### 6.3 UDP
+
+UDP（User Datagram Protocol），这边的User可以理解为程序员，也就是说UDP是按照程序员的编程思路传送数据报。
+
+UDP常用于：
+
+- 包总量较少的通信（DNS、SNMP等）
+- 视频、音频等多媒体通信（即时通信）
+- 限定于LAN等特定网络中的应用通信
+- 广播通信（广播、多播）
+
+### 6.4 TCP
+
+!!
+
+### 6.5 其它传输层协议
+
+#### UDP-Lite
+
+#### SCTP
+
+SCTP（Stream Control Transmission Protocol，流控制传输协议）
+
+#### DCCP
+
+DCCP（数据报拥塞控制协议）
+
+### 6.6 UDP首部的格式
+
+![](../images/networking-066.jpg)
+
+### 6.7 TCP首部格式
+
+![](../images/networking-067.jpg)
+
+## 7 路由协议
+
+### 7.1 路由控制的定义
+
+![](../images/networking-068.jpg)
+
+### 7.2 路由控制范围
+
+IGP（Interior Getway Protocol）
+
+EGP（Exterior Getway Protocol）
+
+![](../images/networking-069.jpg)
+
+### 7.3 路由算法
+
+### 7.4 RIP
+
+### 7.5 OSPF
+
+### 7.6 BGP
+
+### 7.7 MPLS
+
+## 8 应用协议
+
+
+
+### 远程登录
+
+#### TELNET
+
+#### SSH
+
+
+
+### 文件传输
+
+
+
+### 电子邮件
+
+
+
+### WWW
+
+
+
+### 网络管理
+
+#### SNMP
+
+#### MIB
+
+#### RMON
+
+
+
+### 其它应用层协议
+
+#### 多媒体通信实现技术
+
+#### P2P
+
+#### LDAP
+
+
+
+## 9 网络安全
+
+
+
+### 网络安全构成要素
+
+![](../images/networking-070.jpg)
+
+
+
+#### 防火墙
+
+#### IDS（入侵检测系统）
+
+#### 反病毒/个人防火墙
+
+
+
+### 加密技术基础
+
+![](../images/networking-071.jpg)
+
+
+
+
+
+![](../images/networking-072.jpg)
+
+
+
+### 安全协议
+
+#### IPsec和VPN
+
+
+
+#### TLS/SSL与HTTPS
+
+
+
+#### IEEE802.1X
+
+
 
