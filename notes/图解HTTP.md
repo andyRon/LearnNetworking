@@ -1,9 +1,12 @@
 图解HTTP
 ------------
 
+
 ## 1 了解Web及网络基础
 
 通过发送请求获取服务器资源的Web浏览器等，都可称为**客户端（client）**。
+
+![](../images/networking-124.jpg)
 
 Web使用一种名为**HTTP（HyperText Transfer Protocol，超文本传输协议，transfer翻译成转移更准确）**的协议作为规范，完成从客户端到服务器端等一系列运作流程。
 
@@ -21,6 +24,18 @@ CERN（欧洲核子研究组织）的蒂姆·伯纳斯-李（Tim Berners-Lee）�
 
 由于协议本身非常简单，于是在此基础上设想了很多应用方法并投入了实际使用。现在HTTP协议已经超出了Web这个框架的局限，被运用到了各种场景里。
 
+1993.1，[HTML1.0](https://www.w3.org/MarkUp/draft-ietf-iiir-html-01.txt)
+
+1990，HTTP/0.9
+
+1996.5，[HTTP/1.0](https://www.ietf.org/rfc/rfc1945.txt)
+
+1997.1，[HTTP/1.1](http://www.ietf.org/rfc/rfc2616.txt)
+
+
+
+
+
 ### 网络基础TCP/IP
 
 TCP/IP是互联网相关的各类协议族的总称。
@@ -34,15 +49,31 @@ TCP/IP协议族按层次分别分为以下4层：
 
 ![](../images/networking-030.jpg)
 
-封装（encapsulate）
+封装（encapsulate）：把数据信息包装起来。
+
+
 
 ### 与HTTP关系密切的协议：IP、TCP和DNS
 
-**IP协议（Internet Protocol）**的作用是把各种数据包传送给对方。而要保证确实传送到对方那里，则需要满足各类条件。其中两个重要的条件是IP地址和MAC地址（Media Access Control Address）。
+#### 负责传输的IP协议
+
+**IP协议（Internet Protocol）**的作用是把各种数据包传送给对方。而要保证确实传送到对方那里，则需要满足各类条件。其中两个重要的条件是**IP地址**和**MAC地址**（Media Access Control Address，网卡所诉的固定地址）。
+
+**ARP协议**（Address ResolutionProtocol）根据iPhone地址反查对应的MAC地址。
+
+#### 确保可靠性的TCP协议
+
+TCP位于传输层，提供可靠的字节流服务。
+
+**字节流服务**（Byte Stream Service）：为了方便传输，将大块数据分割成以报文段（segment）为单位的数据包进行管理。
 
 **TCP协议**通过三次握手（three-way handshaking）策略，来保证可靠性：
 
-发送端首先发送一个带SYN（synchronize）标志的数据包给对方。接收端收到后，回传一个带有SYN/ACK（acknowledgement）标志的数据包以示传达确认信息。最后，发送端再回传一个带ACK标志的数据包，代表“握手”结束。
+发送端首先发送一个带**SYN（synchronize）**标志的数据包给对方。接收端收到后，回传一个带有SYN/**ACK（acknowledgement）**标志的数据包以示传达确认信息。最后，发送端再回传一个带ACK标志的数据包，代表“握手”结束。
+
+
+
+### 负责域名解析的DNS服务
 
 **DNS（Domain Name System）**服务是和HTTP协议一样位于应用层的协议。它提供域名到IP地址之间的解析服务。
 
@@ -78,23 +109,27 @@ telnet://192.0.2.16:80/  urn:oasis:names:specification:docbook:dtd:xml:4.1.2
 
 一些用来制定HTTP协议技术标准的文档，它们被称为**RFC**（Request for Comments，征求修正意见书）。
 
+
+
 ## 2 简单的HTTP协议
 
 ### 通过请求和响应的交换达成通信
 
 ![](../images/networking-033.jpg)
 
-请求报文是由**请求方法**、**请求URI**（指明访问的资源对象）、**协议版本**、可选的**请求首部字段**和**内容实体**构成的。
+**请求报文**是由**请求方法**、**请求URI**（指明访问的资源对象）、**协议版本**、可选的**请求首部字段**和**内容实体**构成的。
 
 ![](../images/networking-034.jpg)
 
-响应报文基本上由**协议版本**、**状态码**（status code，表示请求成功或失败的数字代码）、用以解释状态码的**原因短语**（reason-phrase）、可选的**响应首部字段**（header field）以及**实体主体**（entity body）构成。
+**响应报文**基本上由**协议版本**、**状态码**（status code，表示请求成功或失败的数字代码）、用以解释状态码的**原因短语**（reason-phrase）、可选的**响应首部字段**（header field）以及**实体主体**（entity body）构成。
 
 ![](../images/networking-035.jpg)
 
+
+
 ### HTTP是不保存状态的协议
 
-HTTP是一种不保存状态，即无状态（stateless）协议。HTTP协议自身不对请求和响应之间的通信状态进行保存。
+HTTP是一种不保存状态，即**无状态（stateless）**协议。HTTP协议自身不对请求和响应之间的通信状态进行保存。
 
 ### 请求URI定位资源
 
@@ -108,9 +143,15 @@ OPTIONS * HTTP/1.1
 
 #### GET：获取资源
 
+GET方法用来请求访问已被URI识别的资源。指定的资源经服务器端解析后返回响应内容。也就是说，如果请求的资源是文本，那就保持原样返回；如果是像CGI（Common Gateway Interface，通用网关接口）那样的程序，则返回经过执行后的输出结果。
+
 #### POST：传输实体主体
 
+
+
 #### PUT：传输文件
+
+像FTP协议的文件上传一样，要求在请求报文的主体中包含文件内容，然后保存到请求URI指定的位置。
 
 PUT方法自身不带验证机制，一般禁用。若配合Web应用程序的验证机制，或架构设计采用REST（RepresentationalState Transfer，表征状态转移）标准的同类Web网站，就可能会开放使用PUT方法。
 
@@ -136,15 +177,23 @@ TRACE方法是让Web服务器端将之前的请求通信环回给客户端的方
 
 发送请求时，在Max-Forwards首部字段中填入数值，每经过一个服务器端就将该数字减1，当数值刚好减到0时，就停止继续传输，最后接收到请求的服务器端则返回状态码200 OK的响应。
 
-!!
+客户端通过TRACE方法可以查询发送出去的请求是怎样被加工修改/篡改的。这是因为，请求想要连接到源目标服务器可能会通过代理中转，TRACE方法就是用来确认连接过程中发生的一系列操作。
+
+但是，TRACE方法本来就不怎么常用，再加上它容易引发XST（Cross-Site Tracing，**跨站追踪**）攻击，通常就更不会用到了。
+
+![](../images/networking-073.jpg)
 
 #### CONNECT：要求用隧道协议连接代理
 
-CONNECT方法要求在与代理服务器通信时建立隧道，实现用隧道协议进行TCP通信。主要使用SSL（Secure Sockets Layer，安全套接层）和TLS（Transport Layer Security，传输层安全）协议把通信内容加密后经网络隧道传输。
+CONNECT方法要求在与代理服务器通信时建立隧道，实现用隧道协议进行TCP通信。主要使用**SSL**（Secure Sockets Layer，安全套接层）和**TLS**（Transport Layer Security，传输层安全）协议把通信内容加密后经网络隧道传输。
+
+![](../images/networking-074.jpg)
+
+
 
 ### 持久连接节省通信量
 
-持久连接（HTTP Persistent Connections，也称为HTTP keep-alive或HTTP connection reuse），特点是只要任意一端没有明确提出断开连接，则保持TCP连接状态。
+持久连接（HTTP Persistent Connections，也称为**HTTP keep-alive**或HTTP connection reuse），特点是只要任意一端没有明确提出断开连接，则保持TCP连接状态。
 
 ![](../images/networking-038.jpg)
 
@@ -154,15 +203,19 @@ CONNECT方法要求在与代理服务器通信时建立隧道，实现用隧道�
 
 比如，当请求一个包含10张图片的HTML Web页面，与挨个连接相比，用持久连接可以让请求更快结束。而管线化技术则比持久连接还要快。请求数越多，时间差就越明显。
 
+
+
 ### 使用Cookie的状态管理
 
-Cookie会根据从服务器端发送的响应报文内的一个叫做Set-Cookie的首部字段信息，通知客户端保存Cookie。当下次客户端再往该服务器发送请求时，客户端会自动在请求报文中加入Cookie值后发送出去。
+Cookie会根据从服务器端发送的响应报文内的一个叫做`Set-Cookie`的首部字段信息，通知客户端保存Cookie。当下次客户端再往该服务器发送请求时，客户端会自动在请求报文中加入Cookie值后发送出去。
 
 服务器端发现客户端发送过来的Cookie后，会去检查究竟是从哪一个客户端发来的连接请求，然后对比服务器上的记录，最后得到之前的状态信息。
 
 ![](../images/networking-040.jpg)
 
 ![](../images/networking-041.jpg)
+
+
 
 ## 3 HTTP报文内的HTTP信息
 
