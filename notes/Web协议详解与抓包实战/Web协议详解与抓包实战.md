@@ -35,11 +35,11 @@
 
 ### 浏览器发起 HTTP 请求的典型场景
 
-![](../images/networking-001.jpg)
+![](../../images/networking-001.jpg)
 
 
 
-![](../images/networking-002.jpg)
+![](../../images/networking-002.jpg)
 
 
 
@@ -55,7 +55,7 @@ a **stateless** application-level **request/response** protocol that uses **exte
 
 ### 基于ABNF语义定义的HTTP消息格式
 
-![](../images/networking-003.jpg)
+![](../../images/networking-003.jpg)
 
 #### ABNF (扩充巴科斯-瑙尔范式)操作符
 
@@ -85,7 +85,7 @@ method SP request-target SP HTTP-version CRLF
 
 #### ABNF (扩充巴科斯-瑙尔范式)核心规则
 
-![](../images/networking-004.jpg)
+![](../../images/networking-004.jpg)
 
 
 
@@ -109,7 +109,7 @@ status-line=HTTP-versionSPstatus-codeSPreason-phraseCRLF
 
 
 
-![](../images/networking-005.jpg)
+![](../../images/networking-005.jpg)
 
 ```
 GET /wp-content/plugins/Pure-Highlightjs_1.0/assets/pure-highlight.css?ver=0.1.0 HTTP/1.1
@@ -126,11 +126,11 @@ OSI概念模型
 
 7 层  负载均衡
 
-![](../images/networking-006.jpg)
+![](../../images/networking-006.jpg)
 
 #### 报文头部
 
-![](../images/networking-007.jpg)
+![](../../images/networking-007.jpg)
 
 wireshark 上手👨‍💻‍
 
@@ -158,7 +158,7 @@ wireshark 上手👨‍💻‍
 
 
 
-![](../images/networking-008.jpg)
+![](../../images/networking-008.jpg)
 
 ### 评估Web架构的七大关键属性
 
@@ -228,7 +228,7 @@ HTTP 协议应当在以下属性中取得可接受的**均衡**:
 - 管道与过滤器 Pipe And Filter，PF
    • 每个 Filter 都有输入端和输出端，只能从输入端读取数据，处理后再从输出端产生数据
 
-  ![](../images/networking-009.jpg)
+  ![](../../images/networking-009.jpg)
 
 - 统一接口的管道与过滤器 Uniform Pipe And Filter，UPF
    • 在 PF 上增加了统一接口的约束，所有 Filter 过滤器必须具备同样的接口
@@ -241,7 +241,7 @@ HTTP 协议应当在以下属性中取得可接受的**均衡**:
 - **缓存 $**
    • RR的变体，通过复制请求的结果，为后续请求复用
 
-![](../images/networking-010.jpg)
+![](../../images/networking-010.jpg)
 
 #### 分层风格Hierarchical Styles (一)
 
@@ -269,7 +269,7 @@ HTTP 协议应当在以下属性中取得可接受的**均衡**:
 
 ##### LC$SS 架构
 
-![](../images/networking-011.jpg)
+![](../../images/networking-011.jpg)
 
 #### 分层风格 Hierarchical Styles (二)
 
@@ -310,7 +310,7 @@ HTTP 协议应当在以下属性中取得可接受的**均衡**:
 
 ##### 统一接口的 LC$SS+COD
 
-![](../images/networking-012.jpg)
+![](../../images/networking-012.jpg)
 
 
 
@@ -345,7 +345,7 @@ HTTP 协议应当在以下属性中取得可接受的**均衡**:
 
 #### 风格演化
 
-![](../images/networking-013.jpg)
+![](../../images/networking-013.jpg)
 
 ###  如何用Chrome的Network面板分析HTTP报文
 
@@ -353,7 +353,7 @@ https://developers.google.com/web/tools/chrome-devtools/network/
 
 #### Network 面板
 
-![](../images/networking-014.jpg)
+![](../../images/networking-014.jpg)
 
 
 
@@ -511,7 +511,7 @@ https://developers.google.com/web/tools/chrome-devtools/network/
 - **Receiving Push**: 浏览器正在通过 HTTP/2 服务器推送接收此响应的数据
 - **Reading Push**: 浏览器正在读取之前收到的本地数据
 
-![](../images/networking-015.jpg)
+![](../../images/networking-015.jpg)
 
 
 
@@ -559,7 +559,7 @@ https://developers.google.com/web/tools/chrome-devtools/network/
 
 • 组成:schema, user information, host, port, path, query, fragment
 
-![](../images/networking-016.jpg)
+![](../../images/networking-016.jpg)
 
 
 
@@ -701,7 +701,7 @@ unreserved = ALPHA / DIGIT / "-" / "." / "_" / "~"
 
 request-line = method SP request-target SP HTTP-version CRLF
 
-![](../images/networking-017.jpg)
+![](../../images/networking-017.jpg)
 
 method 方法:指明操作目的，动词
 **request-target = origin-form / absolute-form / authority-form / asterisk-form**
@@ -782,7 +782,7 @@ https://time.geekbang.org/course/detail/100026801-94392
 
 右击 > Follow > HTTP Stream
 
-![](../images/networking-018.jpg)
+![](../../images/networking-018.jpg)
 
 ### HTTP的正确响应码
 
@@ -790,7 +790,7 @@ https://time.geekbang.org/course/detail/100026801-94392
 
 status-line = HTTP-version SP status-code SP reason-phrase CRLF
 
-![](../images/networking-019.jpg)
+![](../../images/networking-019.jpg)
 
 #### 响应码分类:1xx
 
@@ -934,13 +934,13 @@ status-line = HTTP-version SP status-code SP reason-phrase CRLF
 
 短链接
 
-![](../images/networking-020.jpg)
+![](../../images/networking-020.jpg)
 
 
 
 #### 从 TCP 编程上看 HTTP 请求处理
 
-![](../images/networking-021.jpg)
+![](../../images/networking-021.jpg)
 
 
 
@@ -965,13 +965,13 @@ Connection 头部
 
   不转发 Connection 列出头部，该 头部仅与当前连接相关
 
-![](../images/networking-022.jpg)
+![](../../images/networking-022.jpg)
 
 #### Connection 仅针对当前连接有效
 
 user agent 与 origin server 间有层层 proxy 代理
 
-![](../images/networking-023.jpg)
+![](../../images/networking-023.jpg)
 
 
 
@@ -997,7 +997,7 @@ user agent 与 origin server 间有层层 proxy 代理
 
 
 
-![](../images/networking-024.jpg)
+![](../../images/networking-024.jpg)
 
 
 
@@ -1061,7 +1061,7 @@ user agent 与 origin server 间有层层 proxy 代理
 
 #### 客户端与源服务器间存在多个代理
 
-![](../images/networking-025.jpg)
+![](../../images/networking-025.jpg)
 
 
 
@@ -1170,20 +1170,20 @@ Chrome与Safari使用同样的渲染引擎
 
 每个 URI 指向的资源可以是任何事物，可以有多种不同的表述，例如一份文档可以有不同语言的翻译、不同的媒体格式、可以针对不同的浏览器提供不同的压缩编码等。
 
-![](../images/networking-026.jpg)
+![](../../images/networking-026.jpg)
 
 ##### 内容协商的两种方式
 
 - Proactive 主动式内容协商:
   指由客户端先在请求头部中提出需要的表述形式，而服务器根据这些请求头部提供特定的 representation 表述
 
-  ![](../images/networking-027.jpg)
+  ![](../../images/networking-027.jpg)
 
 - Reactive 响应式内容协商:  （没有统一标准，各大浏览器很少使用）
 
   指服务器返回 300 Multiple Choices 或者 406 Not Acceptable，由客户端 选择一种表述 URI 使用
 
-  ![image-20200322173717069](../images/networking-028.jpg)
+  ![image-20200322173717069](../../images/networking-028.jpg)
 
 
 
@@ -1230,7 +1230,7 @@ Chrome与Safari使用同样的渲染引擎
 
 在Chrome中拷贝访问百度首页的curl命令，到命令中测试
 
-![](../images/networking-029.jpg)
+![](../../images/networking-029.jpg)
 
 ```shell
 $ curl 'https://www.baidu.com/' -H 'Connection: keep-alive' -H 'Upgrade-Insecure-Requests: 1' -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36' -H 'Sec-Fetch-Dest: document' -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9' -H 'Sec-Fetch-Site: none' -H 'Sec-Fetch-Mode: navigate' -H 'Sec-Fetch-User: ?1' -H 'Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7,de;q=0.6' -H 'Cookie: BAIDUID=F9989570A3E97C2BA3ECCC641B3719BB:FG=1; BIDUPSID=F9989570A3E97C2BA3ECCC641B3719BB; PSTM=1557330526; BD_UPN=123253; BDUSS=VdmamtLVi1Odk1IM0VJazB6VmFDc1pJRzJpbH5xVkRPbmRrRkp-Z3VabUt3SVJkRVFBQUFBJCQAAAAAAAAAAAEAAABOJ4oIMTU4N18AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIozXV2KM11dL; BDORZ=B490B5EBF6F3CD402E515D22BCDA1598; MCITY=-%3A; delPer=0; BD_CK_SAM=1; PSINO=3; H_PS_PSSID=30972_1444_31125_21109_30840_30905_30823_31085; BDSVRTM=0' --compressed
