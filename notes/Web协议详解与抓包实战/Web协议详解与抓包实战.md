@@ -1090,7 +1090,7 @@ user agent 与 origin server 间有层层 proxy 代理
 
 #### 如何传递 IP 地址?
 
-![](/Users/andyron/Library/Application Support/typora-user-images/image-20200322161957451.png)
+![](images/image-20200322161957451.png)
 
 ### 请求与响应的上下文
 
@@ -1183,7 +1183,7 @@ Chrome与Safari使用同样的渲染引擎
 
   指服务器返回 300 Multiple Choices 或者 406 Not Acceptable，由客户端 选择一种表述 URI 使用
 
-  ![image-20200322173717069](../../images/networking-028.jpg)
+  ![](../../images/networking-028.jpg)
 
 
 
